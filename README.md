@@ -1,1 +1,199 @@
 # church-website
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grace Baptist Church of Ravensmead</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 20px;
+    }
+
+    header img.bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5); /* Dark overlay for contrast */
+      z-index: -1;
+    }
+
+    header h1 {
+      font-size: 3em;
+      animation: fadeInDown 1.2s ease-out;
+    }
+
+    header p {
+      font-size: 1.2em;
+      margin-top: 10px;
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    a.button {
+      background: #00c3ff;
+      color: white;
+      padding: 14px 28px;
+      margin-top: 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      animation: fadeIn 2s ease-out;
+    }
+
+    a.button:hover {
+      background: #0077b6;
+    }
+
+    section {
+      padding: 80px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease-out;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .verse-box {
+      background: #e8f0fe;
+      border-left: 6px solid #1e88e5;
+      padding: 20px;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .service-times p {
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background: #1e1e1e;
+      color: #aaa;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img class="bg" src="C:\Users\princ\Downloads\20220904_084315.jpg" alt="Church Background">
+    <h1>Grace Baptist Church of Ravensmead</h1>
+    <p>Where we learn the truth</p>
+    <a href="#contact" class="button">Visit Us</a>
+  </header>
+
+  <section id="verseSection">
+    <h2>📖 Verse of the Day</h2>
+    <div class="verse-box" id="verseBox">Loading verse...</div>
+    <a href="#" class="button" onclick="loadVerse()">Get Another Verse</a>
+  </section>
+
+  <section id="servicesSection">
+    <h2>⛪ Service Times</h2>
+    <div class="service-times">
+      <p><strong>Sundays:</strong> 10:00 AM – Worship & Sermon</p>
+      <p><strong>Wednesdays:</strong> 6:45 PM – Prayer & Bible Study</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>📍 Visit Us</h2>
+    <p>Dalton St, Cape Town, South Africa</p>
+    <p>Email: <a href="mailto:PastorPP@gmail.com">PastorPP@gmail.com</a></p>
+    <p>Phone: <a href="tel:+2763686866">+27 636 868 66</a></p>
+  </section>
+
+  <footer>
+    &copy; 2025 Grace Baptist Church of Ravensmead. All rights reserved.
+  </footer>
+
+  <script>
+    async function loadVerse() {
+      try {
+        const response = await fetch('https://beta.ourmanna.com/api/v1/get/?format=json');
+        const data = await response.json();
+        const verse = data.verse.details.text;
+        const ref = data.verse.details.reference;
+        document.getElementById("verseBox").innerText = `"${verse}" — ${ref}`;
+      } catch (error) {
+        document.getElementById("verseBox").innerText = "Unable to load verse. Please try again later.";
+      }
+    }
+
+    const sections = document.querySelectorAll('section');
+    window.addEventListener('scroll', () => {
+      const trigger = window.innerHeight / 1.2;
+      sections.forEach(section => {
+        const top = section.getBoundingClientRect().top;
+        if (top < trigger) {
+          section.classList.add('visible');
+        }
+      });
+    });
+
+    loadVerse();
+  </script>
+
+</body>
+</html>
